@@ -1,0 +1,6 @@
+id,reason,customer_type,days_since_purchase,ground_truth
+6,"el producto llegó defectuoso pero lo seguí usando hasta que dejó de funcionar","regular",20,"Se rechaza el reembolso porque, aunque existía un defecto inicial, el cliente continuó usando el producto, lo que constituye un uso indebido que tiene prioridad sobre otras reglas."
+7,"el producto funciona pero llegó con mucho retraso y no lo necesito","regular",25,"Se aprueba el reembolso porque el retraso significativo en la entrega es un motivo válido de excepción, incluso si el producto funciona correctamente y el cliente ya no lo necesita."
+8,"el producto llegó defectuoso pero también lo dañé parcialmente","VIP",40,"Se aprueba el reembolso porque el cliente es VIP y existe un defecto de fábrica, lo cual tiene prioridad sobre el tiempo, y en casos mixtos se favorece al cliente VIP."
+9,"usé el producto incorrectamente y dejó de funcionar","VIP",10,"Se rechaza el reembolso porque el daño fue causado por uso indebido del cliente, lo cual tiene prioridad incluso sobre el estado VIP."
+10,"el producto funciona bien pero llegó extremadamente tarde y afectó su uso","regular",35,"Se aprueba el reembolso porque el retraso significativo es una excepción válida que puede superar la restricción de tiempo, incluso si el producto funciona correctamente."
