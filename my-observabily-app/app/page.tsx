@@ -353,55 +353,70 @@ export default function ChatPage() {
                <span className="text-[10px] bg-zinc-100 text-zinc-400 py-1 px-3 rounded-full font-medium">CHAT DE REEMBOLSOS</span>
             </div>
 
-            {messages.map((msg, i) => (
-              <div
-                key={i}
-                className={`flex gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300 ${
-                  msg.role === "user" ? "flex-row-reverse" : "flex-row"
-                }`}
-              >
-                <div className={`w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center overflow-hidden border ${
-                  msg.role === "user" ? "bg-white border-zinc-200" : "bg-orange-50 border-orange-100"
-                }`}>
-                  {msg.role === "assistant" ? (
-                    <img src="/ayi.png" alt="Ayi" className="w-10 h-10 object-contain" />
-                  ) : (
-                    <div className="bg-gradient-to-br from-zinc-400 to-zinc-600 w-full h-full flex items-center justify-center text-white text-xs font-bold">U</div>
-                  )}
-                </div>
-                
-                <div className={`flex flex-col gap-1 max-w-[80%] ${msg.role === "user" ? "items-end" : "items-start"}`}>
-                  <div
-                    className={`rounded-2xl p-4 text-sm shadow-[0_2px_8px_rgba(0,0,0,0.04)] ${
-                      msg.role === "user"
-                        ? "bg-zinc-900 text-white rounded-tr-none"
-                        : "bg-white text-zinc-800 rounded-tl-none border border-zinc-100"
-                    }`}
-                  >
-                    <p className="whitespace-pre-wrap leading-relaxed">
-                      {msg.content}
-                    </p>
-                    
-                    {/* Decision Badges */}
-                    {msg.role === "assistant" && (msg.content.includes("APPROVE")) && (
-                        <div className="mt-3 flex items-center gap-2 bg-green-50 text-green-700 px-3 py-2 rounded-xl border border-green-100 font-bold text-xs uppercase tracking-tight">
-                            <span className="w-5 h-5 bg-green-500 text-white rounded-full flex items-center justify-center text-[10px]">✓</span>
-                            Reembolso Aprobado
-                        </div>
-                    )}
-                    {msg.role === "assistant" && (msg.content.includes("DENY")) && (
-                        <div className="mt-3 flex items-center gap-2 bg-red-50 text-red-700 px-3 py-2 rounded-xl border border-red-100 font-bold text-xs uppercase tracking-tight">
-                            <span className="w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-[10px]">✕</span>
-                            Reembolso Denegado
-                        </div>
+            {messages.map((msg, i) => {
+              const isApproved = msg.role === "assistant" && (/APPROVE|reembolso aceptado|se aprueba|reembolso aprobado/i.test(msg.content));
+              const isDenied = msg.role === "assistant" && (/DENY|reembolso rechazado|rechazar el reembolso|reembolso denegado|debe ser rechazado/i.test(msg.content));
+              
+              // Limpiar el contenido si hay una decisión para evitar redundancia
+              let displayContent = msg.content;
+              if (isApproved || isDenied) {
+                displayContent = displayContent
+                  .replace(/\*\*Decisi[óo]n:.*?\*\*/gi, "")
+                  .replace(/Decisi[óo]n:.*?\n/gi, "")
+                  .replace(/APPROVE|DENY/gi, "")
+                  .trim();
+              }
+
+              return (
+                <div
+                  key={i}
+                  className={`flex gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300 ${
+                    msg.role === "user" ? "flex-row-reverse" : "flex-row"
+                  }`}
+                >
+                  <div className={`w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center overflow-hidden border ${
+                    msg.role === "user" ? "bg-white border-zinc-200" : "bg-orange-50 border-orange-100"
+                  }`}>
+                    {msg.role === "assistant" ? (
+                      <img src="/ayi.png" alt="Ayi" className="w-10 h-10 object-contain" />
+                    ) : (
+                      <div className="bg-gradient-to-br from-zinc-400 to-zinc-600 w-full h-full flex items-center justify-center text-white text-xs font-bold">U</div>
                     )}
                   </div>
-                  <span className="text-[10px] text-zinc-400 px-1">
-                    {msg.role === "assistant" ? "Ayi" : "Tú"} • Ahora
-                  </span>
+                  
+                  <div className={`flex flex-col gap-1 max-w-[80%] ${msg.role === "user" ? "items-end" : "items-start"}`}>
+                    <div
+                      className={`rounded-2xl p-4 text-sm shadow-[0_2px_8px_rgba(0,0,0,0.04)] ${
+                        msg.role === "user"
+                          ? "bg-zinc-900 text-white rounded-tr-none"
+                          : "bg-white text-zinc-800 rounded-tl-none border border-zinc-100"
+                      }`}
+                    >
+                      {/* Decision Badges at the TOP */}
+                      {isApproved && (
+                          <div className="mb-3 flex items-center gap-2 bg-green-50 text-green-700 px-3 py-2 rounded-xl border border-green-100 font-bold text-xs uppercase tracking-tight">
+                              <span className="w-5 h-5 bg-green-500 text-white rounded-full flex items-center justify-center text-[10px]">✓</span>
+                              Reembolso Aprobado
+                          </div>
+                      )}
+                      {isDenied && (
+                          <div className="mb-3 flex items-center gap-2 bg-red-50 text-red-700 px-3 py-2 rounded-xl border border-red-100 font-bold text-xs uppercase tracking-tight">
+                              <span className="w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-[10px]">✕</span>
+                              Reembolso Denegado
+                          </div>
+                      )}
+
+                      <p className="whitespace-pre-wrap leading-relaxed">
+                        {displayContent}
+                      </p>
+                    </div>
+                    <span className="text-[10px] text-zinc-400 px-1">
+                      {msg.role === "assistant" ? "Ayi" : "Tú"} • Ahora
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
 
             {isLoading && (
               <div className="flex gap-3">
