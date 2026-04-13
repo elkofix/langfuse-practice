@@ -455,6 +455,7 @@ export default function ChatPage() {
            <div className="max-w-2xl mx-auto flex items-center gap-3">
               <input
                 type={practiceStep === PracticeSubStep.DAYS ? "number" : "text"}
+                min={practiceStep === PracticeSubStep.DAYS ? "0" : undefined}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSend()}

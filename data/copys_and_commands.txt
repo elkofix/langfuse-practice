@@ -10,3 +10,13 @@ cd my-observabily-app
 npm run dev
 
 Nombre de prompt: refund_bot
+
+
+Primer prompt:
+
+Decide if a refund should be approved or denied.
+Return APPROVE or DENY.
+
+Customer type: {{customer_type}}
+Days since purchase: {{days_since_purchase}}
+Reason: {{reason}}
