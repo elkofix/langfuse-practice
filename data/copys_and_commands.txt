@@ -1,0 +1,12 @@
+Levantar langfuse:
+
+docker-compose up -d
+
+
+Levantar app:
+
+cd my-observabily-app
+
+npm run dev
+
+Nombre de prompt: refund_bot
