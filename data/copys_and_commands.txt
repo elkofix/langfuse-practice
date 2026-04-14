@@ -1,7 +1,8 @@
+
+
 Levantar langfuse:
 
 docker-compose up -d
-
 
 Levantar app:
 
